@@ -125,14 +125,14 @@ const elements = {
     submit: document.getElementById("submit")
 };
 
-let gameState = { timeLeft: 60, score: 0, totalTime: 0, correctAnswer: 0, timer: null };
+let gameState = { timeLeft: 60, score: 0, totalTime: 0, correctAnswer: 0, wrongAnswers: 0, timer: null };
 
 const updateDisplay = () => {
     elements.score.textContent = gameState.score.toString().padStart(3, "0");
     elements.time.textContent = formatTime(gameState.timeLeft);
-    const percentage = Math.min((gameState.timeLeft / 60) * 100, 100);
-    elements.progress.style.width = `${percentage}%`;
-    elements.progress.setAttribute("aria-valuenow", percentage);
+    elements.progress.style.width = `${Math.min((gameState.timeLeft / 60) * 100, 100)}%`;
+    elements.progress.setAttribute("aria-valuenow", Math.min((gameState.timeLeft / 60) * 100, 100));
+    document.getElementById("wrong").textContent = `${gameState.wrongAnswers} / 5`;
 };
 
 const generateQuestion = () => {
@@ -152,7 +152,7 @@ const generateQuestion = () => {
 };
 
 const startGame = () => {
-    Object.assign(gameState, { score: 0, timeLeft: 60, totalTime: 0 });
+    Object.assign(gameState, { score: 0, timeLeft: 60, totalTime: 0, wrongAnswers: 0 });
     generateQuestion();
     updateDisplay();
     showPage('page_game');
@@ -197,17 +197,19 @@ elements.backspace.addEventListener("click", () => elements.answer.value = eleme
 
 elements.submit.addEventListener("click", () => {
     const userAnswer = parseInt(elements.answer.value);
-    gameState.score = userAnswer === gameState.correctAnswer
-        ? gameState.score + 10
-        : Math.max(gameState.score - 15, 0);
-    gameState.timeLeft = userAnswer === gameState.correctAnswer
-        ? gameState.timeLeft + 5
-        : Math.max(gameState.timeLeft - 5, 0);
+    if (userAnswer === gameState.correctAnswer) {
+        gameState.score += 10;
+        gameState.timeLeft += 5;
+    } else {
+        gameState.score = Math.max(gameState.score - 15, 0);
+        gameState.timeLeft = Math.max(gameState.timeLeft - 5, 0);
+        gameState.wrongAnswers++;
+    }
 
     elements.answer.value = "";
     generateQuestion();
     updateDisplay();
-    if (gameState.timeLeft <= 0) {
+    if (gameState.timeLeft <= 0 || gameState.wrongAnswers >= 5) {
         clearInterval(gameState.timer);
         gameOver();
     }
