@@ -167,15 +167,16 @@ const updateDisplay = () => {
 };
 
 const generateQuestion = () => {
-    const ops = ["+", "-", "*", "/"];
+    const ops = ["+", "-", "*", "/", "^"];
     const op = ops[Math.floor(Math.random() * ops.length)];
     let num1, num2, answer;
 
     switch (op) {
         case "+": num1 = Math.floor(Math.random() * 50) + 1; num2 = Math.floor(Math.random() * 50) + 1; answer = num1 + num2; break;
-        case "-": num1 = Math.floor(Math.random() * 50) + 1; num2 = Math.floor(Math.random() * num1) + 1; answer = num1 - num2; break;
+        case "-": num1 = Math.floor(Math.random() * 50) + 1; num2 = Math.floor(Math.random() * num1); answer = num1 - num2; break;
         case "*": num1 = Math.floor(Math.random() * 12) + 1; num2 = Math.floor(Math.random() * 12) + 1; answer = num1 * num2; break;
-        case "/": const divisor = Math.floor(Math.random() * 12) + 1; const quotient = Math.floor(Math.random() * 12) + 1; num1 = divisor * quotient; num2 = divisor; answer = quotient; break;
+        case "/": const quotient = Math.floor(Math.random() * 12) + 1; const divisor = Math.floor(Math.random() * 12) + 1; num1 = divisor * quotient; num2 = divisor; answer = quotient; break;
+        case "^": num1 = Math.floor(Math.random() * 4) + 2; num2 = Math.floor(Math.random() * 3) + 1; answer = Math.pow(num1, num2); break;
     }
 
     elements.question.textContent = `${num1} ${op} ${num2}`;
