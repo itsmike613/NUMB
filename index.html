@@ -83,33 +83,43 @@
         <div class="d-none" id="page_home">
             <div class="card mb-5">
                 <div class="card-body pb-3">
-                    <div class="font-display fw-bolder text-heading ls-tight">LEADERBOARDS</div>
-                    <hr class="my-4">
-                    <div class="mb-4">
-                        <h5>Easy Mode</h5>
-                        <div class="list-group list-group-flush list-group-easy"></div>
+                    <div class="font-display fw-bolder text-heading ls-tight mb-3">LEADERBOARDS</div>
+                    <ul class="nav nav-tabs nav-tabs-line nav-fill mb-3" id="leaderboardTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="easy-tab" data-bs-toggle="tab" href="#easy" role="tab">Easy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="normal-tab" data-bs-toggle="tab" href="#normal" role="tab">Normal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="hard-tab" data-bs-toggle="tab" href="#hard" role="tab">Hard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="extreme-tab" data-bs-toggle="tab" href="#extreme" role="tab">Extreme</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="easy" role="tabpanel">
+                            <div class="list-group list-group-flush list-group-easy" style="max-height: 200px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="tab-pane fade" id="normal" role="tabpanel">
+                            <div class="list-group list-group-flush list-group-normal" style="max-height: 200px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="tab-pane fade" id="hard" role="tabpanel">
+                            <div class="list-group list-group-flush list-group-hard" style="max-height: 200px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="tab-pane fade" id="extreme" role="tabpanel">
+                            <div class="list-group list-group-flush list-group-extreme" style="max-height: 200px; overflow-y: auto;"></div>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <h5>Normal Mode</h5>
-                        <div class="list-group list-group-flush list-group-normal"></div>
-                    </div>
-                    <div class="mb-4">
-                        <h5>Hard Mode</h5>
-                        <div class="list-group list-group-flush list-group-hard"></div>
-                    </div>
-                    <div class="mb-4">
-                        <h5>Extreme Mode</h5>
-                        <div class="list-group list-group-flush list-group-extreme"></div>
-                    </div>
-                    <div class="mt-4">
-                        <select id="mode-select" class="form-select form-select-sm mb-2">
-                            <option value="easy">Easy</option>
-                            <option value="normal" selected>Normal</option>
-                            <option value="hard">Hard</option>
-                            <option value="extreme">Extreme</option>
-                        </select>
-                        <button class="btn btn-sm btn-dark w-100" id="start-game">Start</button>
-                    </div>
+                    <hr class="my-3">
+                    <select id="mode-select" class="form-select form-select-sm mb-2">
+                        <option value="easy">Easy</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Hard</option>
+                        <option value="extreme">Extreme</option>
+                    </select>
+                    <button class="btn btn-sm btn-dark w-100" id="start-game">Start</button>
                 </div>
             </div>
 
