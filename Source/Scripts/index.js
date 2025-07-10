@@ -13,32 +13,39 @@ const auth = firebase.auth();
 
 const formatTime = s => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
 
-async function loadLeaderboard() {
+const modes = {
+    easy: { time: 120, maxWrong: 20, correctTime: 5, wrongTime: -5, correctScore: 10, wrongScore: -15 },
+    normal: { time: 60, maxWrong: 10, correctTime: 5, wrongTime: -5, correctScore: 10, wrongScore: -15 },
+    hard: { time: 30, maxWrong: 5, correctTime: 3, wrongTime: -5, correctScore: 10, wrongScore: -15 },
+    extreme: { time: 20, maxWrong: 3, correctTime: 3, wrongTime: -5, correctScore: 10, wrongScore: -15 }
+};
+
+async function loadLeaderboard(mode) {
     const users = (await db.collection('users').get())
         .docs
-        .filter(doc => doc.data().score > 0)
+        .filter(doc => doc.data()[`${mode}Score`] > 0)
         .map(doc => ({ id: doc.id, ...doc.data() }))
-        .sort((a, b) => b.bestScore - a.bestScore || a.bestTime - b.bestTime)
+        .sort((a, b) => b[`${mode}Score`] - a[`${mode}Score`] || a[`${mode}Time`] - b[`${mode}Time`])
         .slice(0, 4);
 
-    const leaderboard = document.querySelector('#page_home .list-group');
+    const leaderboard = document.querySelector(`#page_home .list-group-${mode}`);
     leaderboard.innerHTML = users.map((user, i) => `
-        <div class="list-group-item d-flex align-items-center justify-content-between gap-6 border-0 py-2">
-            <div class="d-flex align-items-center gap-3">
-                <div class="icon icon-shape rounded flex-none text-bg-light">
-                    <i class="ph ph-${i === 0 ? 'crown-simple' : i === 1 ? 'trophy' : i === 2 ? 'medal' : 'exam'} text-lg"></i>
-                </div>
-                <div>
-                    <span class="d-block text-heading text-sm fw-semibold">${user.displayName}</span>
-                    <span class="d-none d-sm-block text-muted text-xs">@${user.username}</span>
-                </div>
-            </div>
-            <div class="text-end">
-                <span class="d-block text-heading text-sm fw-bold">SCORED ${user.score.toString().padStart(3, '0')}</span>
-                <span class="d-block text-muted text-xs">TIMED ${formatTime(user.time)}</span>
-            </div>
+    <div class="list-group-item d-flex align-items-center justify-content-between gap-6 border-0 py-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="icon icon-shape rounded flex-none text-bg-light">
+          <i class="ph ph-${i === 0 ? 'crown-simple' : i === 1 ? 'trophy' : i === 2 ? 'medal' : 'exam'} text-lg"></i>
         </div>
-    `).join('');
+        <div>
+          <span class="d-block text-heading text-sm fw-semibold">${user.displayName}</span>
+          <span class="d-none d-sm-block text-muted text-xs">@${user.username}</span>
+        </div>
+      </div>
+      <div class="text-end">
+        <span class="d-block text-heading text-sm fw-bold">SCORED ${user[`${mode}Score`].toString().padStart(3, '0')}</span>
+        <span class="d-block text-muted text-xs">TIMED ${formatTime(user[`${mode}Time`])}</span>
+      </div>
+    </div>
+  `).join('');
 }
 
 const toggleForms = () => {
@@ -63,7 +70,15 @@ const handleForm = async (e, isLogin) => {
                 return alert('Username already taken');
             }
             const { user } = await auth.createUserWithEmailAndPassword(email, password);
-            await db.collection('users').doc(user.uid).set({ username, displayName, email, score: 0, time: 0 });
+            await db.collection('users').doc(user.uid).set({
+                username,
+                displayName,
+                email,
+                easyScore: 0, easyTime: 0,
+                normalScore: 0, normalTime: 0,
+                hardScore: 0, hardTime: 0,
+                extremeScore: 0, extremeTime: 0
+            });
         }
         showHome();
     } catch (error) {
@@ -107,7 +122,12 @@ const showHome = async () => {
         document.getElementById('changeusername').value = username;
         document.getElementById('changedisplay').value = displayName;
     }
-    await loadLeaderboard();
+    await Promise.all([
+        loadLeaderboard('easy'),
+        loadLeaderboard('normal'),
+        loadLeaderboard('hard'),
+        loadLeaderboard('extreme')
+    ]);
 };
 
 const showAuth = () => showPage('page_auth');
@@ -125,14 +145,14 @@ const elements = {
     submit: document.getElementById("submit")
 };
 
-let gameState = { timeLeft: 60, score: 0, totalTime: 0, correctAnswer: 0, wrongAnswers: 0, timer: null };
+let gameState = { timeLeft: 60, score: 0, totalTime: 0, correctAnswer: 0, wrongAnswers: 0, timer: null, mode: 'normal' };
 
 const updateDisplay = () => {
     elements.score.textContent = gameState.score.toString().padStart(3, "0");
     elements.time.textContent = formatTime(gameState.timeLeft);
-    elements.progress.style.width = `${Math.min((gameState.timeLeft / 60) * 100, 100)}%`;
-    elements.progress.setAttribute("aria-valuenow", Math.min((gameState.timeLeft / 60) * 100, 100));
-    document.getElementById("wrong").textContent = `${gameState.wrongAnswers} / 5`;
+    elements.progress.style.width = `${Math.min((gameState.timeLeft / modes[gameState.mode].time) * 100, 100)}%`;
+    elements.progress.setAttribute("aria-valuenow", Math.min((gameState.timeLeft / modes[gameState.mode].time) * 100, 100));
+    document.getElementById("wrong").textContent = `${gameState.wrongAnswers} / ${modes[gameState.mode].maxWrong}`;
 };
 
 const generateQuestion = () => {
@@ -152,7 +172,13 @@ const generateQuestion = () => {
 };
 
 const startGame = () => {
-    Object.assign(gameState, { score: 0, timeLeft: 60, totalTime: 0, wrongAnswers: 0 });
+    gameState.mode = document.getElementById('mode-select').value;
+    Object.assign(gameState, {
+        score: 0,
+        timeLeft: modes[gameState.mode].time,
+        totalTime: 0,
+        wrongAnswers: 0
+    });
     generateQuestion();
     updateDisplay();
     showPage('page_game');
@@ -174,9 +200,13 @@ const gameOver = async () => {
     if (user) {
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
-            const { score = 0, time = 0 } = userDoc.data();
-            if (gameState.score > score || (gameState.score === score && gameState.totalTime < time)) {
-                await db.collection('users').doc(user.uid).update({ score: gameState.score, time: gameState.totalTime });
+            const currentScore = userDoc.data()[`${gameState.mode}Score`] || 0;
+            const currentTime = userDoc.data()[`${gameState.mode}Time`] || 0;
+            if (gameState.score > currentScore || (gameState.score === currentScore && gameState.totalTime < currentTime)) {
+                await db.collection('users').doc(user.uid).update({
+                    [`${gameState.mode}Score`]: gameState.score,
+                    [`${gameState.mode}Time`]: gameState.totalTime
+                });
             }
         } catch (error) {
             console.error('Error saving score:', error);
@@ -198,18 +228,18 @@ elements.backspace.addEventListener("click", () => elements.answer.value = eleme
 elements.submit.addEventListener("click", () => {
     const userAnswer = parseInt(elements.answer.value);
     if (userAnswer === gameState.correctAnswer) {
-        gameState.score += 10;
-        gameState.timeLeft += 5;
+        gameState.score += modes[gameState.mode].correctScore;
+        gameState.timeLeft += modes[gameState.mode].correctTime;
     } else {
-        gameState.score = Math.max(gameState.score - 15, 0);
-        gameState.timeLeft = Math.max(gameState.timeLeft - 5, 0);
+        gameState.score = Math.max(gameState.score + modes[gameState.mode].wrongScore, 0);
+        gameState.timeLeft = Math.max(gameState.timeLeft + modes[gameState.mode].wrongTime, 0);
         gameState.wrongAnswers++;
     }
 
     elements.answer.value = "";
     generateQuestion();
     updateDisplay();
-    if (gameState.timeLeft <= 0 || gameState.wrongAnswers >= 5) {
+    if (gameState.timeLeft <= 0 || gameState.wrongAnswers >= modes[gameState.mode].maxWrong) {
         clearInterval(gameState.timer);
         gameOver();
     }

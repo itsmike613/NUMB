@@ -32,11 +32,13 @@
             <form class="vstack gap-2" id="login">
                 <div>
                     <label>Email</label>
-                    <input type="email" class="form-control form-control-sm" id="loginemail" placeholder="Your email address" required>
+                    <input type="email" class="form-control form-control-sm" id="loginemail"
+                        placeholder="Your email address" required>
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="password" class="form-control form-control-sm" id="loginpassword" placeholder="Password" required>
+                    <input type="password" class="form-control form-control-sm" id="loginpassword"
+                        placeholder="Password" required>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Login</button>
@@ -50,19 +52,23 @@
             <form class="vstack gap-2 d-none" id="create">
                 <div>
                     <label>Username</label>
-                    <input type="text" class="form-control form-control-sm" id="username" placeholder="Unique identifier" minlength=3 maxlength=16 required>
+                    <input type="text" class="form-control form-control-sm" id="username"
+                        placeholder="Unique identifier" minlength=3 maxlength=16 required>
                 </div>
                 <div>
                     <label>Display Name</label>
-                    <input type="text" class="form-control form-control-sm" id="display" placeholder="Display name" minlength=3 maxlength=16 required>
+                    <input type="text" class="form-control form-control-sm" id="display" placeholder="Display name"
+                        minlength=3 maxlength=16 required>
                 </div>
                 <div>
                     <label>Email</label>
-                    <input type="email" class="form-control form-control-sm" id="createemail" placeholder="Your email address" required>
+                    <input type="email" class="form-control form-control-sm" id="createemail"
+                        placeholder="Your email address" required>
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="password" class="form-control form-control-sm" id="createpassword" placeholder="Password" required>
+                    <input type="password" class="form-control form-control-sm" id="createpassword"
+                        placeholder="Password" required>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Create Account</button>
@@ -77,12 +83,31 @@
         <div class="d-none" id="page_home">
             <div class="card mb-5">
                 <div class="card-body pb-3">
-                    <div class="font-display fw-bolder text-heading ls-tight">THE TOP 4</div>
+                    <div class="font-display fw-bolder text-heading ls-tight">LEADERBOARDS</div>
                     <hr class="my-4">
-                    <div class="list-group list-group-flush">
+                    <div class="mb-4">
+                        <h5>Easy Mode</h5>
+                        <div class="list-group list-group-flush list-group-easy"></div>
                     </div>
-                    
+                    <div class="mb-4">
+                        <h5>Normal Mode</h5>
+                        <div class="list-group list-group-flush list-group-normal"></div>
+                    </div>
+                    <div class="mb-4">
+                        <h5>Hard Mode</h5>
+                        <div class="list-group list-group-flush list-group-hard"></div>
+                    </div>
+                    <div class="mb-4">
+                        <h5>Extreme Mode</h5>
+                        <div class="list-group list-group-flush list-group-extreme"></div>
+                    </div>
                     <div class="mt-4">
+                        <select id="mode-select" class="form-select form-select-sm mb-2">
+                            <option value="easy">Easy</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="hard">Hard</option>
+                            <option value="extreme">Extreme</option>
+                        </select>
                         <button class="btn btn-sm btn-dark w-100" id="start-game">Start</button>
                     </div>
                 </div>
@@ -95,11 +120,13 @@
                     <form class="vstack gap-2" id="settings-form">
                         <div>
                             <label>Username</label>
-                            <input type="text" class="form-control form-control-sm" id="changeusername" minlength=3 maxlength=16 required>
+                            <input type="text" class="form-control form-control-sm" id="changeusername" minlength=3
+                                maxlength=16 required>
                         </div>
                         <div>
                             <label>Display Name</label>
-                            <input type="text" class="form-control form-control-sm" id="changedisplay" minlength=3 maxlength=16 required>
+                            <input type="text" class="form-control form-control-sm" id="changedisplay" minlength=3
+                                maxlength=16 required>
                         </div>
 
                         <div>
@@ -121,7 +148,7 @@
                 </div>
                 <div>
                     <i class="ph ph-receipt-x me-2"></i>
-                    <span id="wrong">0 / 5</span>
+                    <span id="wrong">0 / 10</span>
                 </div>
                 <div>
                     <i class="ph ph-clock-countdown me-2"></i>
@@ -139,7 +166,8 @@
             </div>
 
             <div class="mt-5">
-                <input type="number" class="form-control form-control-sm" id="answer" placeholder="Input your answer" disabled>
+                <input type="number" class="form-control form-control-sm" id="answer" placeholder="Input your answer"
+                    disabled>
             </div>
 
             <div class="mt-5">
@@ -163,14 +191,17 @@
                     <button type="button" class="btn btn-outline-danger btn-sm flex-fill me-1" id="backspace">
                         <i class="ph ph-backspace"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-success btn-sm flex-fill ms-1" id="submit">Enter</button>
+                    <button type="button" class="btn btn-outline-success btn-sm flex-fill ms-1"
+                        id="submit">Enter</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Body Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <script src="Source/Scripts/index.js"></script>
 </body>
 
