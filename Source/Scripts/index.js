@@ -20,6 +20,16 @@ const modes = {
     extreme: { time: 20, maxWrong: 3, correctTime: 3, wrongTime: -5, correctScore: 10, wrongScore: -15 }
 };
 
+function updateModeDetails() {
+    const mode = document.getElementById('mode-select').value;
+    const modeData = modes[mode];
+    document.getElementById('mode-details').innerHTML = `
+    <p><i class="ph ph-clock"></i> Time: ${modeData.time}s | Max Wrong: ${modeData.maxWrong}</p>
+    <p><i class="ph ph-check-circle"></i> Correct: +${modeData.correctScore} score, +${modeData.correctTime}s</p>
+    <p><i class="ph ph-x-circle"></i> Wrong: ${modeData.wrongScore} score, ${modeData.wrongTime}s</p>
+  `;
+}
+
 async function loadLeaderboard(mode) {
     const users = (await db.collection('users').get())
         .docs
@@ -122,6 +132,7 @@ const showHome = async () => {
         document.getElementById('changeusername').value = username;
         document.getElementById('changedisplay').value = displayName;
     }
+    updateModeDetails();
     await Promise.all([
         loadLeaderboard('easy'),
         loadLeaderboard('normal'),
@@ -220,6 +231,7 @@ document.getElementById('create').addEventListener('submit', e => handleForm(e, 
 document.getElementById('login').addEventListener('submit', e => handleForm(e, true));
 document.getElementById('settings-form').addEventListener('submit', updateSettings);
 document.getElementById('logout').addEventListener('click', () => auth.signOut());
+document.getElementById('mode-select').addEventListener('change', updateModeDetails);
 document.getElementById('start-game').addEventListener('click', startGame);
 
 elements.numbers.forEach(btn => btn.addEventListener("click", () => elements.answer.value += btn.value));

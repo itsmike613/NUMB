@@ -32,13 +32,11 @@
             <form class="vstack gap-2" id="login">
                 <div>
                     <label>Email</label>
-                    <input type="email" class="form-control form-control-sm" id="loginemail"
-                        placeholder="Your email address" required>
+                    <input type="email" class="form-control form-control-sm" id="loginemail" placeholder="Your email address" required>
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="password" class="form-control form-control-sm" id="loginpassword"
-                        placeholder="Password" required>
+                    <input type="password" class="form-control form-control-sm" id="loginpassword" placeholder="Password" required>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Login</button>
@@ -52,23 +50,19 @@
             <form class="vstack gap-2 d-none" id="create">
                 <div>
                     <label>Username</label>
-                    <input type="text" class="form-control form-control-sm" id="username"
-                        placeholder="Unique identifier" minlength=3 maxlength=16 required>
+                    <input type="text" class="form-control form-control-sm" id="username" placeholder="Unique identifier" minlength=3 maxlength=16 required>
                 </div>
                 <div>
                     <label>Display Name</label>
-                    <input type="text" class="form-control form-control-sm" id="display" placeholder="Display name"
-                        minlength=3 maxlength=16 required>
+                    <input type="text" class="form-control form-control-sm" id="display" placeholder="Display name" minlength=3 maxlength=16 required>
                 </div>
                 <div>
                     <label>Email</label>
-                    <input type="email" class="form-control form-control-sm" id="createemail"
-                        placeholder="Your email address" required>
+                    <input type="email" class="form-control form-control-sm" id="createemail" placeholder="Your email address" required>
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="password" class="form-control form-control-sm" id="createpassword"
-                        placeholder="Password" required>
+                    <input type="password" class="form-control form-control-sm" id="createpassword" placeholder="Password" required>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Create Account</button>
@@ -81,6 +75,27 @@
         </div>
 
         <div class="d-none" id="page_home">
+            <div class="card mb-5">
+                <div class="card-body pb-3">
+                    <div class="font-display fw-bolder text-heading ls-tight">PLAY</div>
+                    <hr class="my-4">
+                    <div class="vstack gap-2">
+                        <select id="mode-select" class="form-select form-select-sm" onchange="updateModeDetails()">
+                            <option value="easy">Easy</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="hard">Hard</option>
+                            <option value="extreme">Extreme</option>
+                        </select>
+                        <div id="mode-details" class="text-muted text-xs">
+                            <p><i class="ph ph-clock"></i> Time: 60s | Max Wrong: 10</p>
+                            <p><i class="ph ph-check-circle"></i> Correct: +10 score, +5s</p>
+                            <p><i class="ph ph-x-circle"></i> Wrong: -15 score, -5s</p>
+                        </div>
+                        <button class="btn btn-sm btn-dark w-100 mt-2" id="start-game">Start</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="card mb-5">
                 <div class="card-body pb-3">
                     <div class="font-display fw-bolder text-heading ls-tight mb-3">LEADERBOARDS</div>
@@ -112,14 +127,6 @@
                             <div class="list-group list-group-flush list-group-extreme" style="max-height: 200px; overflow-y: auto;"></div>
                         </div>
                     </div>
-                    <hr class="my-3">
-                    <select id="mode-select" class="form-select form-select-sm mb-2">
-                        <option value="easy">Easy</option>
-                        <option value="normal" selected>Normal</option>
-                        <option value="hard">Hard</option>
-                        <option value="extreme">Extreme</option>
-                    </select>
-                    <button class="btn btn-sm btn-dark w-100" id="start-game">Start</button>
                 </div>
             </div>
 
