@@ -14,10 +14,8 @@ const auth = firebase.auth();
 const formatTime = s => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
 
 const modes = {
-    easy: { time: 120, maxWrong: 20, correctTime: 5, wrongTime: -5, correctScore: 10, wrongScore: -15 },
-    normal: { time: 60, maxWrong: 10, correctTime: 5, wrongTime: -5, correctScore: 10, wrongScore: -15 },
-    hard: { time: 30, maxWrong: 5, correctTime: 3, wrongTime: -5, correctScore: 10, wrongScore: -15 },
-    extreme: { time: 20, maxWrong: 3, correctTime: 3, wrongTime: -5, correctScore: 10, wrongScore: -15 }
+    normal: { time: 30, maxWrong: 5, correctTime: 4, wrongTime: -5, correctScore: 10, wrongScore: -15 },
+    marathon: { time: 60, maxWrong: 10, correctTime: 5, wrongTime: -5, correctScore: 10, wrongScore: -10 }
 };
 
 function updateModeDetails() {
@@ -84,10 +82,8 @@ const handleForm = async (e, isLogin) => {
                 username,
                 displayName,
                 email,
-                easyScore: 0, easyTime: 0,
                 normalScore: 0, normalTime: 0,
-                hardScore: 0, hardTime: 0,
-                extremeScore: 0, extremeTime: 0
+                marathonScore: 0, marathonTime: 0
             });
         }
         showHome();
@@ -134,10 +130,8 @@ const showHome = async () => {
     }
     updateModeDetails();
     await Promise.all([
-        loadLeaderboard('easy'),
         loadLeaderboard('normal'),
-        loadLeaderboard('hard'),
-        loadLeaderboard('extreme')
+        loadLeaderboard('marathon')
     ]);
 };
 
@@ -156,7 +150,7 @@ const elements = {
     submit: document.getElementById("submit")
 };
 
-let gameState = { timeLeft: 60, score: 0, totalTime: 0, correctAnswer: 0, wrongAnswers: 0, timer: null, mode: 'normal' };
+let gameState = { timeLeft: 30, score: 0, totalTime: 0, correctAnswer: 0, wrongAnswers: 0, timer: null, mode: 'normal' };
 
 const updateDisplay = () => {
     elements.score.textContent = gameState.score.toString().padStart(3, "0");
@@ -167,7 +161,7 @@ const updateDisplay = () => {
 };
 
 const generateQuestion = () => {
-    const ops = ["+", "-", "*", "/", "^"];
+    const ops = ["+", "-", "*", "/"];
     const op = ops[Math.floor(Math.random() * ops.length)];
     let num1, num2, answer;
 
@@ -176,7 +170,6 @@ const generateQuestion = () => {
         case "-": num1 = Math.floor(Math.random() * 50) + 1; num2 = Math.floor(Math.random() * num1); answer = num1 - num2; break;
         case "*": num1 = Math.floor(Math.random() * 12) + 1; num2 = Math.floor(Math.random() * 12) + 1; answer = num1 * num2; break;
         case "/": const quotient = Math.floor(Math.random() * 12) + 1; const divisor = Math.floor(Math.random() * 12) + 1; num1 = divisor * quotient; num2 = divisor; answer = quotient; break;
-        case "^": num1 = Math.floor(Math.random() * 4) + 2; num2 = Math.floor(Math.random() * 3) + 1; answer = Math.pow(num1, num2); break;
     }
 
     elements.question.textContent = `${num1} ${op} ${num2}`;
