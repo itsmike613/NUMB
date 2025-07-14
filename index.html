@@ -59,6 +59,17 @@
         </div>
 
         <div class="d-none" id="page_home">
+            <div class="d-flex align-items-center justify-content-center bg-light min-vh-100 w-100">
+                <div class="w-100 p-7" style="max-width: 400px;">
+                    <h3 class="mb-2">NUMB</h3>
+                    <button class="btn btn-sm btn-dark w-100 mb-2" onclick="showPlay()">Play</button>
+                    <button class="btn btn-sm btn-dark w-100 mb-2" onclick="showLeaderboard()">Leaderboard</button>
+                    <button class="btn btn-sm btn-dark w-100 mb-2" onclick="showSettings()">Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-none" id="page_play">
             <div class="container p-5" style="max-width: 400px;">
                 <div class="card mb-5">
                     <div class="card-body pb-3">
@@ -70,15 +81,16 @@
                                 <option value="marathon">Marathon</option>
                             </select>
                             <div id="mode-details" class="text-muted text-xs">
-                                <p><i class="ph ph-clock"></i> Time: 30s | Max Wrong: 5</p>
-                                <p><i class="ph ph-check-circle"></i> Correct: +10 score, +3s</p>
-                                <p><i class="ph ph-x-circle"></i> Wrong: -15 score, -5s</p>
                             </div>
                             <button class="btn btn-sm btn-dark w-100 mt-2" id="start-game">Start</button>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <div class="d-none" id="page_lebo">
+            <div class="container p-5" style="max-width: 400px;">
                 <div class="card mb-5">
                     <div class="card-body pb-3">
                         <div class="font-display fw-bolder text-heading ls-tight mb-3">LEADERBOARDS</div>
@@ -100,7 +112,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <div class="d-none" id="page_user">
+            <div class="container p-5" style="max-width: 400px;">
                 <div class="card">
                     <div class="card-body pb-3">
                         <div class="font-display fw-bolder text-heading ls-tight">SETTINGS</div>
@@ -108,11 +124,11 @@
                         <form class="vstack gap-2" id="settings-form">
                             <div>
                                 <label>Username</label>
-                                <input type="text" class="form-control form-control-sm" id="changeusername" minlength=3 maxlength=16 required>
+                                <input type="text" class="form-control form-control-sm" id="changeusername" minlength="3" maxlength="16" required>
                             </div>
                             <div>
                                 <label>Display Name</label>
-                                <input type="text" class="form-control form-control-sm" id="changedisplay" minlength=3 maxlength=16 required>
+                                <input type="text" class="form-control form-control-sm" id="changedisplay" minlength="3" maxlength="16" required>
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Save</button>

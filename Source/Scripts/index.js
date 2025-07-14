@@ -115,25 +115,66 @@ const updateSettings = async e => {
 };
 
 const showPage = (page) => {
-    ['page_auth', 'page_home', 'page_game'].forEach(id =>
+    ['page_auth', 'page_home', 'page_play', 'page_lebo', 'page_user', 'page_game'].forEach(id =>
         document.getElementById(id).classList.toggle('d-none', id !== page)
     );
 };
 
-const showHome = async () => {
+const showHome = () => {
     showPage('page_home');
-    const user = auth.currentUser;
-    if (user) {
-        const { username, displayName } = (await db.collection('users').doc(user.uid).get()).data();
-        document.getElementById('changeusername').value = username;
-        document.getElementById('changedisplay').value = displayName;
-    }
+};
+
+const showPlay = () => {
+    showPage('page_play');
     updateModeDetails();
+};
+
+const showLeaderboard = async () => {
+    showPage('page_lebo');
     await Promise.all([
         loadLeaderboard('normal'),
         loadLeaderboard('marathon')
     ]);
 };
+
+const showSettings = async () => {
+    showPage('page_user');
+    const user = auth.currentUser;
+    if (user) {
+        const doc = await db.collection('users').doc(user.uid).get();
+        const { username, displayName } = doc.data();
+        document.getElementById('changeusername').value = username;
+        document.getElementById('changedisplay').value = displayName;
+    }
+};
+
+async function loadLeaderboard(mode) {
+    const users = (await db.collection('users').get())
+        .docs
+        .filter(doc => doc.data()[`${mode}Score`] > 0)
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => b[`${mode}Score`] - a[`${mode}Score`] || a[`${mode}Time`] - b[`${mode}Time`])
+        .slice(0, 4);
+
+    const leaderboard = document.querySelector(`#page_lebo .list-group-${mode}`);
+    leaderboard.innerHTML = users.map((user, i) => `
+        <div class="list-group-item d-flex align-items-center justify-content-between gap-6 border-0 py-2">
+          <div class="d-flex align-items-center gap-3">
+            <div class="icon icon-shape rounded flex-none text-bg-light">
+              <i class="ph ph-${i === 0 ? 'crown-simple' : i === 1 ? 'trophy' : i === 2 ? 'medal' : 'exam'} text-lg"></i>
+            </div>
+            <div>
+              <span class="d-block text-heading text-sm fw-semibold">${user.displayName}</span>
+              <span class="d-none d-sm-block text-muted text-xs">@${user.username}</span>
+            </div>
+          </div>
+          <div class="text-end">
+            <span class="d-block text-heading text-sm fw-bold">SCORED ${user[`${mode}Score`].toString().padStart(3, '0')}</span>
+            <span class="d-block text-muted text-xs">TIMED ${formatTime(user[`${mode}Time`])}</span>
+          </div>
+        </div>
+    `).join('');
+}
 
 const showAuth = () => showPage('page_auth');
 
