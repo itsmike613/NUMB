@@ -27,179 +27,165 @@
 </head>
 
 <body>
-    <div class="container p-5" style="max-width: 400px;">
+    <div>
         <div class="d-none" id="page_auth">
-            <form class="vstack gap-2" id="login">
-                <div>
-                    <label>Email</label>
-                    <input type="email" class="form-control form-control-sm" id="loginemail" placeholder="Your email address" required>
-                </div>
-                <div>
-                    <label>Password</label>
-                    <input type="password" class="form-control form-control-sm" id="loginpassword" placeholder="Password" required>
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Login</button>
-                </div>
-                <div>
-                    <small>Don't have an account?</small>
-                    <button type="button" class="btn btn-link p-0 toggle-btn">Create one!</button>
-                </div>
-            </form>
+            <div class="d-flex align-items-center justify-content-center bg-light min-vh-100 w-100">
+                <div class="w-100 p-7" style="max-width: 400px;">
+                    <form id="create" class="d-none">
+                        <h3 class="mb-2">Create Account</h3>
+                        <label class="form-label">Display Name</label>
+                        <input type="text" class="form-control form-control-sm mb-2" minlength=3 maxlength=16 id="display" required>
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control form-control-sm mb-2" minlength=3 maxlength=16 id="username" required>
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control form-control-sm mb-2" id="createemail" required>
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control form-control-sm mb-2" id="createpassword" required>
+                        <button type="submit" class="btn btn-sm btn-dark w-100 mb-2">Create Account</button>
+                        <p class="text-center">Already have an account? <span class="text-cyan-700 fw-bold cursor-pointer toggle-btn">Login</span></p>
+                    </form>
 
-            <form class="vstack gap-2 d-none" id="create">
-                <div>
-                    <label>Username</label>
-                    <input type="text" class="form-control form-control-sm" id="username" placeholder="Unique identifier" minlength=3 maxlength=16 required>
-                </div>
-                <div>
-                    <label>Display Name</label>
-                    <input type="text" class="form-control form-control-sm" id="display" placeholder="Display name" minlength=3 maxlength=16 required>
-                </div>
-                <div>
-                    <label>Email</label>
-                    <input type="email" class="form-control form-control-sm" id="createemail" placeholder="Your email address" required>
-                </div>
-                <div>
-                    <label>Password</label>
-                    <input type="password" class="form-control form-control-sm" id="createpassword" placeholder="Password" required>
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Create Account</button>
-                </div>
-                <div>
-                    <small>Already have an account?</small>
-                    <button type="button" class="btn btn-link p-0 toggle-btn">Login</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="d-none" id="page_home">
-            <div class="card mb-5">
-                <div class="card-body pb-3">
-                    <div class="font-display fw-bolder text-heading ls-tight">PLAY</div>
-                    <hr class="my-4">
-                    <div class="vstack gap-2">
-                        <select id="mode-select" class="form-select form-select-sm" onchange="updateModeDetails()">
-                            <option value="normal" selected>Normal</option>
-                            <option value="marathon">Marathon</option>
-                        </select>
-                        <div id="mode-details" class="text-muted text-xs">
-                            <p><i class="ph ph-clock"></i> Time: 30s | Max Wrong: 5</p>
-                            <p><i class="ph ph-check-circle"></i> Correct: +10 score, +3s</p>
-                            <p><i class="ph ph-x-circle"></i> Wrong: -15 score, -5s</p>
-                        </div>
-                        <button class="btn btn-sm btn-dark w-100 mt-2" id="start-game">Start</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-5">
-                <div class="card-body pb-3">
-                    <div class="font-display fw-bolder text-heading ls-tight mb-3">LEADERBOARDS</div>
-                    <ul class="nav nav-tabs nav-tabs-line nav-fill mb-3" id="leaderboardTabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="normal-tab" data-bs-toggle="tab" href="#normal" role="tab">Normal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="marathon-tab" data-bs-toggle="tab" href="#marathon" role="tab">Marathon</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="normal" role="tabpanel">
-                            <div class="list-group list-group-flush list-group-normal" style="max-height: 200px; overflow-y: auto;"></div>
-                        </div>
-                        <div class="tab-pane fade" id="marathon" role="tabpanel">
-                            <div class="list-group list-group-flush list-group-marathon" style="max-height: 200px; overflow-y: auto;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body pb-3">
-                    <div class="font-display fw-bolder text-heading ls-tight">SETTINGS</div>
-                    <hr class="my-4">
-                    <form class="vstack gap-2" id="settings-form">
-                        <div>
-                            <label>Username</label>
-                            <input type="text" class="form-control form-control-sm" id="changeusername" minlength=3 maxlength=16 required>
-                        </div>
-                        <div>
-                            <label>Display Name</label>
-                            <input type="text" class="form-control form-control-sm" id="changedisplay" minlength=3 maxlength=16 required>
-                        </div>
-                        <div>
-                            <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Save</button>
-                        </div>
-                        <div>
-                            <button class="btn btn-sm btn-dark w-100 mt-2" id="logout">Logout</button>
-                        </div>
+                    <form id="login">
+                        <h3 class="mb-2">Login</h3>
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control form-control-sm mb-2" id="loginemail" required>
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control form-control-sm mb-2" id="loginpassword" required>
+                        <button type="submit" class="btn btn-sm btn-dark w-100 mb-2">Login</button>
+                        <p class="text-center">Don’t have an account? <span class="text-cyan-700 fw-bold cursor-pointer toggle-btn">Create Account</span></p>
                     </form>
                 </div>
             </div>
         </div>
 
+        <div class="d-none" id="page_home">
+            <div class="container p-5" style="max-width: 400px;">
+                <div class="card mb-5">
+                    <div class="card-body pb-3">
+                        <div class="font-display fw-bolder text-heading ls-tight">PLAY</div>
+                        <hr class="my-4">
+                        <div class="vstack gap-2">
+                            <select id="mode-select" class="form-select form-select-sm" onchange="updateModeDetails()">
+                                <option value="normal" selected>Normal</option>
+                                <option value="marathon">Marathon</option>
+                            </select>
+                            <div id="mode-details" class="text-muted text-xs">
+                                <p><i class="ph ph-clock"></i> Time: 30s | Max Wrong: 5</p>
+                                <p><i class="ph ph-check-circle"></i> Correct: +10 score, +3s</p>
+                                <p><i class="ph ph-x-circle"></i> Wrong: -15 score, -5s</p>
+                            </div>
+                            <button class="btn btn-sm btn-dark w-100 mt-2" id="start-game">Start</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-5">
+                    <div class="card-body pb-3">
+                        <div class="font-display fw-bolder text-heading ls-tight mb-3">LEADERBOARDS</div>
+                        <ul class="nav nav-tabs nav-tabs-line nav-fill mb-3" id="leaderboardTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="normal-tab" data-bs-toggle="tab" href="#normal" role="tab">Normal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="marathon-tab" data-bs-toggle="tab" href="#marathon" role="tab">Marathon</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="normal" role="tabpanel">
+                                <div class="list-group list-group-flush list-group-normal" style="max-height: 200px; overflow-y: auto;"></div>
+                            </div>
+                            <div class="tab-pane fade" id="marathon" role="tabpanel">
+                                <div class="list-group list-group-flush list-group-marathon" style="max-height: 200px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body pb-3">
+                        <div class="font-display fw-bolder text-heading ls-tight">SETTINGS</div>
+                        <hr class="my-4">
+                        <form class="vstack gap-2" id="settings-form">
+                            <div>
+                                <label>Username</label>
+                                <input type="text" class="form-control form-control-sm" id="changeusername" minlength=3 maxlength=16 required>
+                            </div>
+                            <div>
+                                <label>Display Name</label>
+                                <input type="text" class="form-control form-control-sm" id="changedisplay" minlength=3 maxlength=16 required>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-sm btn-dark w-100 mt-2">Save</button>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-dark w-100 mt-2" id="logout">Logout</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="d-none" id="page_game">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <i class="ph ph-trophy me-2"></i>
-                    <span id="score">000</span>
-                </div>
-                <div>
-                    <i class="ph ph-receipt-x me-2"></i>
-                    <span id="wrong">0 / 5</span>
-                </div>
-                <div>
-                    <i class="ph ph-clock-countdown me-2"></i>
-                    <span id="time-remaining">00:30</span>
-                </div>
-            </div>
-
-            <div class="progress">
-                <div class="progress-bar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-
-            <div class="card w-100 mt-5 text-center fw-bold p-2 display-6" id="question">
-                EQUATION
-            </div>
-
-            <div class="mt-5">
-                <input type="number" class="form-control form-control-sm" id="answer" placeholder="Input your answer" disabled>
-            </div>
-
-            <div class="mt-5">
-                <div class="d-flex justify-content-between mb-2">
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="0">0</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="1">1</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="2">2</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="3">3</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill" value="4">4</button>
-                </div>
-
-                <div class="d-flex justify-content-between mb-2">
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="5">5</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="6">6</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="7">7</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="8">8</button>
-                    <button type="button" class="btn btn-outline-dark btn-sm flex-fill" value="9">9</button>
-                </div>
-
+            <div class="container p-5" style="max-width: 400px;">
                 <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-outline-danger btn-sm flex-fill me-1" id="backspace">
-                        <i class="ph ph-backspace"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-success btn-sm flex-fill ms-1"
-                        id="submit">Enter</button>
+                    <div>
+                        <i class="ph ph-trophy me-2"></i>
+                        <span id="score">000</span>
+                    </div>
+                    <div>
+                        <i class="ph ph-receipt-x me-2"></i>
+                        <span id="wrong">0 / 5</span>
+                    </div>
+                    <div>
+                        <i class="ph ph-clock-countdown me-2"></i>
+                        <span id="time-remaining">00:30</span>
+                    </div>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <div class="card w-100 mt-5 text-center fw-bold p-2 display-6" id="question">
+                    EQUATION
+                </div>
+
+                <div class="mt-5">
+                    <input type="number" class="form-control form-control-sm" id="answer" placeholder="Input your answer" disabled>
+                </div>
+
+                <div class="mt-5">
+                    <div class="d-flex justify-content-between mb-2">
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="0">0</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="1">1</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="2">2</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="3">3</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill" value="4">4</button>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="5">5</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="6">6</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="7">7</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill me-1" value="8">8</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm flex-fill" value="9">9</button>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-danger btn-sm flex-fill me-1" id="backspace">
+                            <i class="ph ph-backspace"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-success btn-sm flex-fill ms-1"
+                            id="submit">Enter</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Body Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="Source/Scripts/index.js"></script>
 </body>
 
